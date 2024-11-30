@@ -1,10 +1,14 @@
 const express = require('express');
 const axios = require('axios');
+const dotenv = require("dotenv");
 const { evaluateChecklist } = require('./checklist');
 const path = require('path');
 
 const app = express();
-const port = 3000;
+dotenv.config();
+
+const port = process.env.PORT;
+const URL = process.env.APIURL;
 
 // Serve static files from the "public" directory
 app.use(express.static(path.join(__dirname, '../public')));
@@ -12,7 +16,7 @@ app.use(express.static(path.join(__dirname, '../public')));
 // Endpoint to fetch and evaluate the checklist
 app.get('/evaluate', async (req, res) => {
     try {
-        const response = await axios.get('http://qa-gb.api.dynamatix.com:3100/api/applications/getApplicationById/67339ae56d5231c1a2c63639');
+        const response = await axios.get(URL);
         const data = response.data;
 
         const result = evaluateChecklist(data);
